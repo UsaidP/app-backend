@@ -39,7 +39,11 @@ const registerUser = asyncHandler(async (req, res) => {
   ) {
     throw new ApiError(400, "All field are required");
   }
+<<<<<<< HEAD
   const existedUser = await User.findOne({
+=======
+  const existedUser = User.findOne({
+>>>>>>> 3a2f5541c2931e45620f1290f2048834a1796104
     $or: [{ username }, { email }],
   });
   // console.log(existedUser);
@@ -48,6 +52,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const avatarLocalPath = req.files?.avatar[0]?.path;
+<<<<<<< HEAD
   // const coverImageLocalPath = req.files?.coverImage[0]?.path;
   // console.log(avatarLocalPath);
   let coverImageLocalPath;
@@ -59,6 +64,11 @@ const registerUser = asyncHandler(async (req, res) => {
     coverImageLocalPath = req.files.coverImage[0].path;
   }
   console.log(coverImageLocalPath);
+=======
+  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  // console.log(avatarLocalPath);
+
+>>>>>>> 3a2f5541c2931e45620f1290f2048834a1796104
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required");
   }
@@ -75,7 +85,11 @@ const registerUser = asyncHandler(async (req, res) => {
     coverImage: coverImage?.url || "",
     email,
     password,
+<<<<<<< HEAD
     username: username.toLowerCase(),
+=======
+    username: username.tolowerCase(),
+>>>>>>> 3a2f5541c2931e45620f1290f2048834a1796104
   });
   const user1 = await User.findById(user._id).select("-password -refreshToken");
   if (!user1) {

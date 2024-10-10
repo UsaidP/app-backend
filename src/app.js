@@ -14,10 +14,14 @@ app.use(
   })
 );
 app.use(express.json({ limit: " 200kb " }));
+<<<<<<< HEAD
 //configures application to parse incoming requests with JSON payloads, max payload is 200kb.
 app.use(express.urlencoded({ extended: true, limit: "200kb" })); //It is use for URL
 //express.urlencoded() middleware function to the application.Allows nested objects in URL-encoded payloads.
 //Parses incoming requests with URL-encoded payloads.
+=======
+app.use(express.urlencoded({ extended: true, limit: "200kb" })); //It is use for URL
+>>>>>>> 3a2f5541c2931e45620f1290f2048834a1796104
 app.use(express.static("public"));
 app.use(cookieParser());
 
