@@ -1,7 +1,7 @@
 {
   "name": "video_strem_project",
   "version": "1.0.0",
-  "description": "this greate project",
+  "description": "this is great project",
   "type": "module",
   "main": "index.js",
   "scripts": {
