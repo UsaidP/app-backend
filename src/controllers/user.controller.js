@@ -7,13 +7,15 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
+    // console.log(user);
     const accessToken = user.generateAccessToken();
+
     const refreshToken = user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
     user.save({ validateBeforeSave: false });
 
-    return accessToken, refreshToken;
+    return { accessToken, refreshToken };
   } catch (error) {
     throw new ApiError(
       500,
@@ -97,14 +99,16 @@ const loginUser = asyncHandler(async (req, res) => {
   // if match send user a message and also send user to eg: Home page route
   // if not match throw error id and password doesnt match
   // send in cookies
-
+  // Destructuring the email, username, and password from the request body
   const { email, username, password } = req.body;
-  if ((!email, !username)) {
+  // Checking if either email or username is not provided
+  if (!email && !username) {
+    // If not provided, throw an error with status code 400 and message "Username or Email is required"
     throw new ApiError(400, "Username or Email is required");
   }
 
   const user = await User.findOne({
-    $or: [email, username],
+    $or: [{ email: email }, { username: username }],
   });
   if (!user) {
     throw new ApiError(404, "User does not exits");
@@ -114,7 +118,9 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid username or password ");
   }
-  await generateAccessAndRefreshToken(user._id);
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
 
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
@@ -156,9 +162,11 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
   );
   const options = {
-    httpOnly: true,
+    // default cookie can be modifiable by client
+    httpOnly: true, //doing this the cookie can only be modifiable by server.
     secure: true,
   };
+
   return res
     .status(200)
     .clearCookie("accessToken", options)
